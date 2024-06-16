@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Team Color Visualization</title>
+		<style>
+			body {
+				background: #ccc;
+				font-family: sans-serif;
+			}
+			h1 {
+				font-size: 16pt;
+			}
+			.colorGroup {
+				display: flex;
+				flex-wrap: wrap;
+				margin: 0;
+				padding: 0;
+			}
+			.colorGroup > div {
+				width: 32px;
+				height: 32px;
+				box-sizing: border-box;
+				border: 1px solid #333;
+				margin: 2px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-weight: bold;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Version 17.2 and older</h1>
+		<div id="old" class="colorGroup"></div>
+		<h1>Version 17.3 and newer</h1>
+		<div id="new" class="colorGroup"></div>
+		<h1>Version 17.3 and newer (sorted by hue)</h1>
+		<div id="newSorted" class="colorGroup"></div>
+		<script>
+			function generateDivs() {
+				for (let i = 0; i < 64; i++) {
+					const div = document.createElement("div");
+					const hue = i * 360.0/64.0;
+					div.style.backgroundColor = `hsl(${hue}, 100%, 50%)`;
+					div.textContent = (i + 1);
+					document.getElementById("old").appendChild(div);
+				}
+				const newDivs = [];
+				for (let i = 0; i < 64; i++) {
+					const div = document.createElement("div");
+					const hue = (i * 137.50776) % 360.0;
+					div.style.backgroundColor = `hsl(${hue}, 100%, 50%)`;
+					div.textContent = (i + 1);
+					newDivs.push({div: div, hue: hue});
+				}
+				for (const divObject of newDivs) {
+					document.getElementById("new").appendChild(divObject.div.cloneNode(true));
+				}
+				newDivs.sort((a, b) => a.hue - b.hue);
+				for (const divObject of newDivs) {
+					document.getElementById("newSorted").appendChild(divObject.div);
+				}
+			}
+			window.onload = generateDivs;
+		</script>
+	</body>
+</html>
